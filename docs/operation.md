@@ -193,19 +193,19 @@ Document folder structure
 
 ```sh
 cd /Users/sagarayuto/kyopro
-./tools/setup_abc abc430
+./sabc abc430
 ```
 
 ARC の場合:
 
 ```sh
-./tools/setup_abc arc180
+./sabc arc180
 ```
 
 一部の問題だけ作る場合:
 
 ```sh
-./tools/setup_abc abc430 d e
+./sabc abc430 d e
 ```
 
 生成先:
@@ -227,13 +227,13 @@ AWC は `tools/setup_awc` を使います。
 
 ```sh
 cd /Users/sagarayuto/kyopro
-./tools/setup_awc 40
+./sawc 40
 ```
 
 `awc0040` と書いてもよいです。
 
 ```sh
-./tools/setup_awc awc0040
+./sawc awc0040
 ```
 
 AWC は5問構成なので、デフォルトで `a b c d e` を作ります。
@@ -241,7 +241,7 @@ AWC は5問構成なので、デフォルトで `a b c d e` を作ります。
 一部だけ作る場合:
 
 ```sh
-./tools/setup_awc 40 d e
+./sawc 40 d e
 ```
 
 生成先:
@@ -260,7 +260,7 @@ abc/setup
 awc/setup_contest.sh
 ```
 
-ただし本体は `tools/` にあります。今後は `tools/` 側を使うのが基本です。
+ただし本体は `tools/` にあります。普段は短い `./sabc` と `./sawc` を使うのが基本です。
 
 ## コンテスト中のデバッグ
 
@@ -535,13 +535,13 @@ git log --oneline -5
 ABC セットアップ:
 
 ```sh
-./tools/setup_abc abc430
+./sabc abc430
 ```
 
 AWC セットアップ:
 
 ```sh
-./tools/setup_awc 40
+./sawc 40
 ```
 
 ## 迷った時
@@ -555,4 +555,3 @@ AWC セットアップ:
 - 外部依存: `vendor/`
 - 普段使わない退避物: `archive/`
 - Git 操作: `/Users/sagarayuto/kyopro`
-

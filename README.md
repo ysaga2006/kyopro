@@ -24,14 +24,14 @@ git status --short
 ABC / ARC のセットアップ:
 
 ```sh
-./tools/setup_abc abc430
-./tools/setup_abc arc180
+./sabc abc430
+./sabc arc180
 ```
 
 AWC のセットアップ:
 
 ```sh
-./tools/setup_awc 40
+./sawc 40
 ```
 
 ライブラリの簡易確認:
@@ -93,4 +93,3 @@ VS CodeでF5実行すると、開いている `.cpp` と同じフォルダの `i
 `input.txt` がなければ、ビルド前に空ファイルが自動作成されます。
 
 ローカルでは `-DLOCAL` が付くため、`debug(...)` が有効です。
-
