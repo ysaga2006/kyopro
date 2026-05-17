@@ -35,7 +35,7 @@ cd /Users/sagarayuto/kyopro
 git status
 ```
 
-`abc/`, `awc/`, `practice/` などの下位フォルダでは Git 操作しません。
+`contests/`, `practice/`, `library/` などの下位フォルダでは Git 操作しません。
 
 現在は下位フォルダごとの `.git` は退避済みで、ルートの `.git` だけを使います。
 
@@ -251,16 +251,7 @@ contests/atcoder/awc/awc0040/a/main.cpp
 contests/atcoder/awc/awc0040/a/input.txt
 ```
 
-### 旧スクリプト
-
-互換用に以下も残しています。
-
-```txt
-abc/setup
-awc/setup_contest.sh
-```
-
-ただし本体は `tools/` にあります。普段は短い `./sabc` と `./sawc` を使うのが基本です。
+setup の本体は `tools/` にあります。普段は短い `./sabc` と `./sawc` を使うのが基本です。
 
 ## コンテスト中のデバッグ
 
@@ -332,7 +323,7 @@ AOJ:
 practice/aoj/ALDS1_1_A.cpp
 ```
 
-既存の `practice/dp-contest`, `practice/tenkei90`, `practice/mizuiro` などはまだ旧配置のままです。新しく作るものから新ルールに寄せます。
+既存の `dp-contest`, `tenkei90`, `mizuiro` なども `practice/atcoder/` 配下へ移動済みです。
 
 ## 精進コードのファイル名
 

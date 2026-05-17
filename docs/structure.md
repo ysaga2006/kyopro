@@ -332,7 +332,7 @@ tools/setup_awc
 tools/bundle.py
 ```
 
-現在は `tools/setup_abc` と `tools/setup_awc` を本体にし、古い `abc/setup` と `awc/setup_contest.sh` は互換用のラッパーとして残しています。
+現在は `tools/setup_abc` と `tools/setup_awc` を本体にし、普段はルートの `sabc` と `sawc` から呼び出します。
 
 ### vendor
 
@@ -371,12 +371,12 @@ kyopro/.clang-format
 
 基本はルートの `.vscode` に寄せます。
 
-ただし、`abc/` や `practice/` を単体で VS Code で開く習慣がある場合、そのフォルダの `.vscode` を残す意味はあります。
+ただし、特定の下位フォルダだけを VS Code で開く習慣がある場合、そのフォルダの `.vscode` を戻す意味はあります。
 
 判断基準:
 
 - `kyopro` 全体を開く: ルート `.vscode` だけでよい
-- `abc` だけ開くことが多い: `abc/.vscode` を残してもよい
+- 特定フォルダだけ開くことが多い: そのフォルダの `.vscode` を戻してもよい
 - ほぼ使っていない: `archive/` へ移す候補
 
 ### .DS_Store

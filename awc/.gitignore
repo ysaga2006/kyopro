@@ -1,9 +1,0 @@
-# Build artifacts
-build/
-**/build/
-*.dSYM/
-tempCodeRunnerFile
-tempCodeRunnerFile.dSYM/
-
-# Test input
-input.txt

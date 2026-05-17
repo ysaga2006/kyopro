@@ -46,10 +46,6 @@ AWC のセットアップ:
 kyopro/
   contests/              # 今後の本番コンテスト置き場
   practice/              # 精進・復習コード
-  abc/                   # 旧ABC/ARCコード置き場
-  awc/                   # 旧AWCコード置き場
-  ahc/                   # 旧AHCコード置き場
-  codeforces/            # 旧Codeforcesコード置き場
   template/              # 提出テンプレート
   library/               # 自作C++ライブラリ
   tools/                 # setupスクリプトなど
@@ -59,7 +55,7 @@ kyopro/
   archive/               # Git管理外の退避場所
 ```
 
-新しく作る本番コンテストは `contests/` へ、精進・復習は `practice/` へ置きます。既存の `abc/`, `awc/`, `ahc/`, `codeforces/` は旧配置として残しています。
+本番コンテストは `contests/` へ、精進・復習は `practice/` へ置きます。旧 `abc/`, `awc/`, `ahc`, `codeforces/` 配下のコードも新配置へ移動済みです。
 
 ## Git管理
 
