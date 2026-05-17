@@ -7,12 +7,15 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 
-#include "library/util/basic.hpp"
-#include "library/util/debug.hpp"
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+    ll n, m, k; cin >> n >> m >> k;
+
+    vector<ll> togo(k);
+    for (ll i = 0; i < k; ++i) cin >> togo[i];
+
+    
     return 0;
 }
