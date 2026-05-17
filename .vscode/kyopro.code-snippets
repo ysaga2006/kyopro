@@ -1,0 +1,201 @@
+{
+  "kyopro main template": {
+    "scope": "cpp",
+    "prefix": "main",
+    "body": [
+      "#include <bits/stdc++.h>",
+      "#include <atcoder/all>",
+      "using namespace std;",
+      "using namespace atcoder;",
+      "",
+      "using ll = long long;",
+      "using ull = unsigned long long;",
+      "using ld = long double;",
+      "",
+      "#include \"library/util/basic.hpp\"",
+      "#include \"library/util/debug.hpp\"",
+      "",
+      "int main() {",
+      "  ios::sync_with_stdio(false);",
+      "  cin.tie(nullptr);",
+      "",
+      "  $0",
+      "  return 0;",
+      "}"
+    ],
+    "description": "kyopro用mainテンプレート"
+  },
+  "rep loop": {
+    "scope": "cpp",
+    "prefix": "rep",
+    "body": [
+      "for (ll ${1:i} = 0; ${1:i} < ${2:n}; ++${1:i}) {",
+      "  $0",
+      "}"
+    ],
+    "description": "0からnまでのforループ"
+  },
+  "reverse rep loop": {
+    "scope": "cpp",
+    "prefix": "rrep",
+    "body": [
+      "for (ll ${1:i} = ${2:n} - 1; ${1:i} >= 0; --${1:i}) {",
+      "  $0",
+      "}"
+    ],
+    "description": "n-1から0までの逆順forループ"
+  },
+  "range for loop": {
+    "scope": "cpp",
+    "prefix": "forr",
+    "body": [
+      "for (ll ${1:i} = ${2:l}; ${1:i} < ${3:r}; ++${1:i}) {",
+      "  $0",
+      "}"
+    ],
+    "description": "半開区間[l, r)のforループ"
+  },
+  "sort all": {
+    "scope": "cpp",
+    "prefix": "sort",
+    "body": [
+      "sort(${1:v}.begin(), ${1:v}.end());"
+    ],
+    "description": "昇順ソート"
+  },
+  "reverse sort": {
+    "scope": "cpp",
+    "prefix": "rsort",
+    "body": [
+      "sort(${1:v}.rbegin(), ${1:v}.rend());"
+    ],
+    "description": "降順ソート"
+  },
+  "chmax call": {
+    "scope": "cpp",
+    "prefix": "chmax",
+    "body": [
+      "chmax(${1:ans}, ${2:x});"
+    ],
+    "description": "chmax呼び出し"
+  },
+  "chmin call": {
+    "scope": "cpp",
+    "prefix": "chmin",
+    "body": [
+      "chmin(${1:ans}, ${2:x});"
+    ],
+    "description": "chmin呼び出し"
+  },
+  "vector ll": {
+    "scope": "cpp",
+    "prefix": "vec",
+    "body": [
+      "vector<ll> ${1:a}(${2:n});"
+    ],
+    "description": "ll vector宣言"
+  },
+  "vector input": {
+    "scope": "cpp",
+    "prefix": "vvin",
+    "body": [
+      "vector<ll> ${1:a}(${2:n});",
+      "for (ll ${3:i} = 0; ${3:i} < ${2:n}; ++${3:i}) cin >> ${1:a}[${3:i}];"
+    ],
+    "description": "ll vector宣言と入力"
+  },
+  "grid input": {
+    "scope": "cpp",
+    "prefix": "grid",
+    "body": [
+      "vector<string> ${1:s}(${2:h});",
+      "for (ll ${3:i} = 0; ${3:i} < ${2:h}; ++${3:i}) cin >> ${1:s}[${3:i}];"
+    ],
+    "description": "文字グリッド入力"
+  },
+  "Yes No output": {
+    "scope": "cpp",
+    "prefix": "yn",
+    "body": [
+      "cout << ((${1:ok}) ? \"Yes\" : \"No\") << '\\n';"
+    ],
+    "description": "Yes/No出力"
+  },
+  "debug call": {
+    "scope": "cpp",
+    "prefix": "debug",
+    "body": [
+      "debug(${1:x});"
+    ],
+    "description": "debug出力"
+  },
+  "bool lambda": {
+    "scope": "cpp",
+    "prefix": "lambda",
+    "body": [
+      "auto ${1:ok} = [&](ll ${2:x}) -> bool {",
+      "  $0",
+      "};"
+    ],
+    "description": "boolを返すlambda"
+  },
+  "binary search": {
+    "scope": "cpp",
+    "prefix": "bin",
+    "body": [
+      "ll ${1:ng} = ${2:-1}, ${3:ok} = ${4:n};",
+      "while (${3:ok} - ${1:ng} > 1) {",
+      "  ll mid = (${1:ng} + ${3:ok}) / 2;",
+      "  if (${5:condition}) ${3:ok} = mid;",
+      "  else ${1:ng} = mid;",
+      "}",
+      "$0"
+    ],
+    "description": "整数二分探索"
+  },
+  "bfs template": {
+    "scope": "cpp",
+    "prefix": "bfs",
+    "body": [
+      "queue<int> que;",
+      "vector<ll> dist(${1:n}, INF);",
+      "dist[${2:s}] = 0;",
+      "que.push(${2:s});",
+      "while (!que.empty()) {",
+      "  int v = que.front();",
+      "  que.pop();",
+      "  for (int to : ${3:g}[v]) {",
+      "    if (dist[to] != INF) continue;",
+      "    dist[to] = dist[v] + 1;",
+      "    que.push(to);",
+      "  }",
+      "}",
+      "$0"
+    ],
+    "description": "BFSテンプレート"
+  },
+  "priority queue min": {
+    "scope": "cpp",
+    "prefix": "pq",
+    "body": [
+      "priority_queue<${1:pair<ll, int>}, vector<${1:pair<ll, int>}>, greater<${1:pair<ll, int>}>> ${2:pq};"
+    ],
+    "description": "小さい順priority_queue"
+  },
+  "modint alias": {
+    "scope": "cpp",
+    "prefix": "mint",
+    "body": [
+      "using mint = modint998244353;"
+    ],
+    "description": "ACL modint998244353 alias"
+  },
+  "combination helper": {
+    "scope": "cpp",
+    "prefix": "comb",
+    "body": [
+      "Combination<mint> ${1:comb}(${2:n});"
+    ],
+    "description": "Combination<mint>宣言"
+  }
+}
