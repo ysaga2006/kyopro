@@ -1,0 +1,38 @@
+.DS_Store
+**/.DS_Store
+
+build/
+**/build/
+
+input.txt
+**/input.txt
+output.txt
+**/output.txt
+contest.acc.json
+**/contest.acc.json
+test/
+**/test/
+
+*.out
+*.exe
+*.dSYM/
+tempCodeRunnerFile*
+
+# Common local binaries produced while solving.
+**/main
+**/gen
+codeforces/1076/a
+
+archive/
+
+# Local/editor-heavy files that should not become repository contents.
+.vscode/cli/
+.vscode/extensions/
+
+# Keep only the useful ACL files: headers, expander, and basic metadata.
+vendor/ac-library/*
+!vendor/ac-library/atcoder/
+!vendor/ac-library/atcoder/**
+!vendor/ac-library/expander.py
+!vendor/ac-library/LICENSE
+!vendor/ac-library/README.md

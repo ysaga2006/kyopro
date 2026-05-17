@@ -1,0 +1,22 @@
+# Ignore everything by default
+*
+
+# Allow directories (needed to traverse them)
+!*/
+
+# Allow .cpp files
+!**/*.cpp
+
+# Allow config files
+!.gitignore
+!.clang-format
+!.vscode/
+!**/.vscode/
+!**/CMakeLists.txt
+!**/compile_flags.txt
+!**/.clangd
+
+# Exclude build artifacts even if re-included above
+build/
+*.dSYM/
+tempCodeRunnerFile.cpp

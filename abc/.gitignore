@@ -1,0 +1,7 @@
+build/
+*.dSYM
+test/
+*.out
+.DS_Store
+input.txt
+contest.acc.json

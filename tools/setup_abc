@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# AtCoder ABC/ARC setup script.
+#
+# Usage:
+#   ./tools/setup_abc abc999
+#   ./tools/setup_abc arc999
+#   ./tools/setup_abc abc999 d e
+
+usage() {
+    echo "使い方: setup_abc <contest_id> [problems]"
+    echo "例:     setup_abc abc999"
+    echo "        setup_abc arc999"
+    echo "        setup_abc abc999 d"
+}
+
+CONTEST="${1:-}"
+
+if [ -z "$CONTEST" ]; then
+    usage
+    exit 1
+fi
+
+shift
+CONTEST="$(echo "$CONTEST" | tr '[:upper:]' '[:lower:]')"
+PREFIX="$(echo "$CONTEST" | sed 's/[0-9]*$//')"
+NUM="$(echo "$CONTEST" | grep -o '[0-9]*$')"
+
+if [ -z "$PREFIX" ] || [ -z "$NUM" ]; then
+    echo "Error: contest_id は abc999 / arc999 の形式で指定してください"
+    exit 1
+fi
+
+if [ $# -gt 0 ]; then
+    FIRST_PROBLEM="$1"
+else
+    case "$PREFIX" in
+        abc) set -- a b c d e f g ;;
+        arc) set -- a b c d e f ;;
+        *) set -- a b c d e f ;;
+    esac
+    FIRST_PROBLEM="$1"
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+KYOPRO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+TEMPLATE="$KYOPRO_ROOT/template/main.cpp"
+
+case "$PREFIX" in
+    abc | arc)
+        BASE="$KYOPRO_ROOT/contests/atcoder/$PREFIX/$CONTEST"
+        ;;
+    *)
+        echo "Error: 未対応の contest_id です: $CONTEST"
+        exit 1
+        ;;
+esac
+
+if [ ! -f "$TEMPLATE" ]; then
+    echo "Error: テンプレートファイルが見つかりません: $TEMPLATE"
+    exit 1
+fi
+
+mkdir -p "$BASE"
+
+for p in "$@"; do
+    DIR="$BASE/$p"
+    mkdir -p "$DIR"
+    if [ ! -f "$DIR/main.cpp" ]; then
+        cp "$TEMPLATE" "$DIR/main.cpp"
+        echo "  ✓ $PREFIX/$CONTEST/$p/main.cpp"
+    else
+        echo "  - $PREFIX/$CONTEST/$p/main.cpp (already exists)"
+    fi
+    if [ ! -f "$DIR/input.txt" ]; then
+        touch "$DIR/input.txt"
+        echo "  ✓ $PREFIX/$CONTEST/$p/input.txt"
+    fi
+done
+
+echo ""
+echo " $CONTEST のセットアップ完了"
+echo " 場所: $BASE/"
+echo " テンプレート: $TEMPLATE"
+
+TARGET_DIR="$BASE/$FIRST_PROBLEM"
+CD_COMMAND="cd $TARGET_DIR"
+
+if command -v pbcopy >/dev/null 2>&1 && printf "%s" "$CD_COMMAND" | pbcopy; then
+    echo " コピー済み: $CD_COMMAND"
+else
+    echo " 移動するなら: $CD_COMMAND"
+fi
+

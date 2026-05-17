@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# AWC setup script.
+#
+# Usage:
+#   ./tools/setup_awc 24
+#   ./tools/setup_awc awc0024
+#   ./tools/setup_awc 24 d e
+
+INPUT="${1:-}"
+
+if [ -z "$INPUT" ]; then
+    echo "使い方: setup_awc <番号> [problems]"
+    echo "例:     setup_awc 24"
+    echo "        setup_awc awc0024"
+    echo "        setup_awc 24 d e"
+    exit 1
+fi
+
+shift
+
+NUM="$(echo "$INPUT" | grep -o '[0-9]*$')"
+if [ -z "$NUM" ]; then
+    echo "Error: 番号を指定してください"
+    exit 1
+fi
+
+CONTEST="$(printf "awc%04d" "$((10#$NUM))")"
+
+if [ $# -gt 0 ]; then
+    PROBLEMS="$*"
+else
+    PROBLEMS="a b c d e"
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+KYOPRO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+TEMPLATE="$KYOPRO_ROOT/template/main.cpp"
+BASE="$KYOPRO_ROOT/contests/atcoder/awc/$CONTEST"
+
+if [ ! -f "$TEMPLATE" ]; then
+    echo "Error: テンプレートが見つかりません: $TEMPLATE"
+    exit 1
+fi
+
+mkdir -p "$BASE"
+
+FIRST_PROBLEM=""
+for p in $PROBLEMS; do
+    if [ -z "$FIRST_PROBLEM" ]; then
+        FIRST_PROBLEM="$p"
+    fi
+    DIR="$BASE/$p"
+    mkdir -p "$DIR"
+    if [ ! -f "$DIR/main.cpp" ]; then
+        cp "$TEMPLATE" "$DIR/main.cpp"
+        echo "  ✓ $CONTEST/$p/main.cpp"
+    else
+        echo "  - $CONTEST/$p/main.cpp (already exists)"
+    fi
+    if [ ! -f "$DIR/input.txt" ]; then
+        touch "$DIR/input.txt"
+        echo "  ✓ $CONTEST/$p/input.txt"
+    fi
+done
+
+CD_COMMAND="cd $BASE/$FIRST_PROBLEM"
+
+if command -v pbcopy >/dev/null 2>&1 && printf "%s" "$CD_COMMAND" | pbcopy; then
+    COPIED="コピー済み"
+else
+    COPIED="移動するなら"
+fi
+
+echo ""
+echo " $CONTEST のセットアップ完了"
+echo " 場所: $BASE/"
+echo " テンプレート: $TEMPLATE"
+echo " $COPIED: $CD_COMMAND"
+
