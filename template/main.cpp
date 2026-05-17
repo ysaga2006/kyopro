@@ -11,8 +11,8 @@ using ld = long double;
 #include "library/util/debug.hpp"
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
 
-    return 0;
+  return 0;
 }
