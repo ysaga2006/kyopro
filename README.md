@@ -13,6 +13,7 @@ ACL に入っている `dsu`, `fenwick_tree`, `segtree`, `lazy_segtree`, `modint
 - ライブラリは `library/...` から include する
 
 フォルダ構成や practice の命名規則は [docs/structure.md](docs/structure.md) にまとめています。
+自分用の競プロメモは [docs/tips.md](docs/tips.md) に置いています。
 
 ## フォルダ構成
 
