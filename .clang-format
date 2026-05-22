@@ -3,8 +3,8 @@ IndentWidth: 2
 TabWidth: 2
 UseTab: Never
 BreakBeforeBraces: Attach
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: Empty
 ColumnLimit: 0
 SortIncludes: Never
