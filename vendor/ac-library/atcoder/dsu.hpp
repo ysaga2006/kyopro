@@ -58,7 +58,7 @@ struct dsu {
         }
         result.erase(
             std::remove_if(result.begin(), result.end(),
-                           [&](const std::vector<int>& v) { return v.empty(); }),
+                          [&](const std::vector<int>& v) { return v.empty(); }),
             result.end());
         return result;
     }
