@@ -7,5 +7,14 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
+  ll n, m; cin >> n >> m;
+  ll cnt = 0;
+  while (m != 0) {
+    ll x = n % m;
+    m = x;
+    cnt++;
+  }
+
+  cout << cnt << '\n';
   return 0;
 }
