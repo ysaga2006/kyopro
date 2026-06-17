@@ -9,7 +9,7 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
-  ll n, l;`
+  ll n, l;
   cin >> n >> l;
 
   vector<ll> dp(n + 1);  // i段目に登る場合の数(0段目は地面)
