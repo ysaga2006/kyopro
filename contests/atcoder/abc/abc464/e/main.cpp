@@ -7,5 +7,9 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
+  ll h, w;
+  cin >> h >> w;
+  
+  
   return 0;
 }
