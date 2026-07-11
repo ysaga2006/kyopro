@@ -9,10 +9,13 @@ int main() {
 
   ll n; cin >> n;
 
-  vector<ll> s(n), p(n);
-  rep(i, n) cin >> s[i] >> p[i];
+  vector<pair<ll, ll>> v(n);
+  rep(i, n) cin >> v[i].second >> v[i].first;
 
-  
-  
+  sort(v.begin(), v.end());
+
+  vector<ll> ssum(n + 1);
+  rep(i, n - 1) ssum[i + 1] += ssum[i];
+
   return 0;
 }
