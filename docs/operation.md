@@ -546,3 +546,7 @@ AWC セットアップ:
 - 外部依存: `vendor/`
 - 普段使わない退避物: `archive/`
 - Git 操作: `/Users/sagarayuto/kyopro`
+
+## テンプレート同期ルール
+
+`template/main.cpp` を変更するときは、`.vscode/kyopro.code-snippets` の `main` スニペットも同じコミットで更新します。
