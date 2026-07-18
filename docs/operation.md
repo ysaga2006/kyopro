@@ -17,9 +17,8 @@
 - Git 操作は必ず `/Users/sagarayuto/kyopro` で行う
 - Git に入れるのはコード、設定、ドキュメント、ライブラリ、テンプレートだけ
 - `input.txt`, `build/`, 実行ファイル, `.DS_Store`, `archive/` は Git に入れない
-- 置き場所は「問題の出典」ではなく「解いた目的」で決める
-- 本番コンテストは `contests/`
-- 後日練習・復習は `practice/`
+- 通常のコンテスト問題は、参加時期に関係なく出典に対応する `contests/` へ置く
+- 教材・問題集・テーマ練習は `practice/` へ置く
 
 ## Git 操作をする場所
 
@@ -290,6 +289,14 @@ test/
 
 VS Code では、対象の `main.cpp` を開いて「タスクの実行」から「複数テスト実行」を選べます。コンパイルは1回だけ行い、すべての `.in` をファイル名順に実行します。
 
+典型90のように1フォルダに複数のソースがある場合は、ソース名ごとの`test/`を自動使用します。
+
+```sh
+./stest practice/tenkei90/032.cpp
+```
+
+この場合、テストの保存先は`practice/tenkei90/test/032/`です。`main.cpp`では従来どおり、同じ問題フォルダの`test/`を使います。
+
 `debug(...)` は `-DLOCAL` が付いている時だけ出力されます。F5 とローカルコンパイルでは有効です。
 
 ```cpp
@@ -317,30 +324,29 @@ git commit -m "Add abc430 solutions"
 
 ## 精進時の運用
 
-精進は `practice/` に置きます。
+精進かどうかだけでは置き場所を変えません。
 
 大事なルール:
 
-- 問題の出典ではなく、練習として解いたかどうかで判断する
-- ABC の過去問でも、練習なら `practice/`
-- 本番参加時のコードとは分けてよい
+- ABC・ARCなど通常のコンテスト過去問: `contests/`の対応する問題フォルダ
+- 典型90・ADT・DP Contest・AOJなどの教材や問題集: `practice/`
 
 ABC 過去問:
 
 ```txt
-practice/atcoder/abc/abc350/c.cpp
+contests/atcoder/abc/abc350/c/main.cpp
 ```
 
 ARC 過去問:
 
 ```txt
-practice/atcoder/arc/arc180/a.cpp
+contests/atcoder/arc/arc180/a/main.cpp
 ```
 
 典型90:
 
 ```txt
-practice/atcoder/tenkei90/001.cpp
+practice/tenkei90/001.cpp
 ```
 
 AOJ:
@@ -349,30 +355,29 @@ AOJ:
 practice/aoj/ALDS1_1_A.cpp
 ```
 
-既存の `dp-contest`, `tenkei90`, `mizuiro` なども `practice/atcoder/` 配下へ移動済みです。
+本番時のコードが既にある問題を解き直す場合は、通常は同じ`main.cpp`を更新します。変更前の実装はGit履歴に残ります。
 
 ## 精進コードのファイル名
 
 基本:
 
-- AtCoder ABC/ARC: `a.cpp`, `b.cpp`, `c.cpp`
-- 典型90: `001.cpp`, `002.cpp`
+- 問題記号で管理する教材: `a.cpp`, `b.cpp`, `c.cpp`
+- 番号で管理する教材: `001.cpp`, `002.cpp`
 - AOJ: 公式IDを使う
-- Codeforces: `<contest>/<problem>.cpp`
+- 同じシリーズでは既存の命名規則を優先する
 
 例:
 
 ```txt
-practice/atcoder/abc/abc350/c.cpp
-practice/atcoder/tenkei90/042.cpp
+practice/atcoder/dp-contest/c.cpp
+practice/tenkei90/042.cpp
 practice/aoj/ITP1_3_D.cpp
-practice/codeforces/1076/a.cpp
 ```
 
 メモや生成器が必要な問題だけ、1問1フォルダにします。
 
 ```txt
-practice/atcoder/abc/abc350/c/
+practice/tenkei90/042/
   main.cpp
   note.md
   input.txt
@@ -563,8 +568,8 @@ AWC セットアップ:
 
 ## 迷った時
 
-- 本番で作ったコード: `contests/`
-- 後から練習で解いたコード: `practice/`
+- ABCなど通常のコンテスト問題: 参加時期に関係なく `contests/`
+- 教材・問題集・テーマ練習: `practice/`
 - 何度も使う部品: `library/`
 - 提出の土台: `template/`
 - ライブラリ確認: `verify/`

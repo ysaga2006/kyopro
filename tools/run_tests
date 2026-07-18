@@ -5,15 +5,24 @@ SOURCE="${1:-main.cpp}"
 
 if [ ! -f "$SOURCE" ]; then
   echo "Error: C++ソースが見つかりません: $SOURCE"
-  echo "使い方: stest [main.cpp]"
+  echo "使い方: stest [source.cpp] [test_dir]"
   exit 1
 fi
 
 SOURCE_DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
-SOURCE_PATH="$SOURCE_DIR/$(basename "$SOURCE")"
-TEST_DIR="${2:-$SOURCE_DIR/test}"
+SOURCE_FILE="$(basename "$SOURCE")"
+SOURCE_NAME="${SOURCE_FILE%.cpp}"
+SOURCE_PATH="$SOURCE_DIR/$SOURCE_FILE"
+
+if [ "$SOURCE_NAME" = "main" ]; then
+  DEFAULT_TEST_DIR="$SOURCE_DIR/test"
+else
+  DEFAULT_TEST_DIR="$SOURCE_DIR/test/$SOURCE_NAME"
+fi
+
+TEST_DIR="${2:-$DEFAULT_TEST_DIR}"
 BUILD_DIR="$SOURCE_DIR/build"
-BINARY="$BUILD_DIR/test_runner"
+BINARY="$BUILD_DIR/test_runner_$SOURCE_NAME"
 
 shopt -s nullglob
 INPUTS=("$TEST_DIR"/*.in)

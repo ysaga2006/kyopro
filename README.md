@@ -2,13 +2,13 @@
 
 競技プログラミング用の作業フォルダです。
 
-このリポジトリには、本番コンテストのコード、精進用コード、C++テンプレート、自作ライブラリ、VS Code設定、運用メモをまとめています。
+このリポジトリには、コンテスト問題のコード、教材・問題集の練習コード、C++テンプレート、自作ライブラリ、VS Code設定、運用メモをまとめています。
 
 ## 入口
 
 - [運用ガイド](docs/operation.md): Git、コンテスト時、精進時、コミット方針
 - [フォルダ構成ルール](docs/structure.md): `contests/` と `practice/` の使い分け、命名規則
-- [構成移行計画](docs/structure-plan.md): 現在の整理方針と今後の移行メモ
+- [構成移行計画](docs/structure-plan.md): 旧構成から移行した記録
 - [ライブラリ説明](docs/library.md): `library/` と `template/` の詳しい説明
 - [競プロメモ](docs/tips.md): 自分用の注意点・気づき
 
@@ -44,8 +44,8 @@ AWC のセットアップ:
 
 ```txt
 kyopro/
-  contests/              # 今後の本番コンテスト置き場
-  practice/              # 精進・復習コード
+  contests/              # 通常のコンテスト問題（参加時期を問わない）
+  practice/              # 教材・問題集・テーマ練習
   template/              # 提出テンプレート
   library/               # 自作C++ライブラリ
   tools/                 # setupスクリプトなど
@@ -55,7 +55,7 @@ kyopro/
   archive/               # Git管理外の退避場所
 ```
 
-本番コンテストは `contests/` へ、精進・復習は `practice/` へ置きます。旧 `abc/`, `awc/`, `ahc`, `codeforces/` 配下のコードも新配置へ移動済みです。
+ABCなどの通常のコンテスト問題は、リアルタイム参加でも過去問演習でも `contests/` へ置きます。`practice/` は典型90、ADT、DP Contest、AOJなど、教材・問題集単位で取り組むコードに使います。
 
 ## Git管理
 

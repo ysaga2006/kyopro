@@ -1,67 +1,32 @@
 # kyopro フォルダ構成ルール
 
-この文書は、`kyopro` フォルダを長く使うための整理ルールです。
-
-目的は、あとから見たときに「これは本番の記録なのか」「練習で解いたものなのか」「共通ライブラリなのか」がすぐ分かるようにすることです。
+この文書は、`kyopro`の現在の配置ルールをまとめたものです。
 
 ## 一番大事なルール
 
-コードの置き場所は、問題の出典ではなく **解いた目的** で決めます。
+コードの置き場所は、リアルタイム参加か後日の精進かではなく、**問題の出典とまとまり**で決めます。
 
-- 本番コンテストとして参加したもの: `contests/`
-- 後日練習・復習・弱点補強として解いたもの: `practice/`
-- 共通で使うテンプレートやライブラリ: `template/`, `library/`
-- 外部依存やツール: `vendor/`, `tools/`
-- もう普段は見ないが残したいもの: `archive/`
+- ABC・ARC・AHC・AWCなど、通常のコンテスト問題: `contests/`
+- 典型90・ADT・DP Contest・AOJなど、教材や問題集として取り組むもの: `practice/`
+- 繰り返し使う自作ライブラリ: `library/`
+- 提出コードの土台: `template/`
+- 外部ライブラリ: `vendor/`
+- 普段使わない退避物: `archive/`
 
-たとえば ABC の過去問を練習として解くなら、出典は ABC でも `practice/` に置きます。
+「いつ解いたか」はGit履歴で分かるため、保存場所では区別しません。
 
-```txt
-practice/atcoder/abc/abc350/c.cpp
-```
-
-一方、ABC にリアルタイム参加して作ったコードは `contests/` に置きます。
+ABC350 Cを過去問として解く場合も、次に置きます。
 
 ```txt
-contests/atcoder/abc/abc430/a/main.cpp
+contests/atcoder/abc/abc350/c/main.cpp
 ```
 
-同じ問題を本番でも解いて、後で復習した場合は、両方にあって構いません。
+既に解答がある問題を解き直す場合は、通常は同じ`main.cpp`を更新します。以前の実装はGit履歴から確認できます。複数実装を同時に残す必要がある場合だけ、`main_alt.cpp`など目的の分かる名前を追加します。
 
-```txt
-contests/atcoder/abc/abc430/e/main.cpp   # 本番時のコード
-practice/atcoder/abc/abc430/e.cpp        # 復習で書き直したコード
-```
-
-これは重複ではなく、時点の違う記録として扱います。
-
-## 理想の全体構成
-
-将来的には、次のような構成を目指します。
+## 全体構成
 
 ```txt
 kyopro/
-  README.md
-  .clang-format
-  .gitignore
-  .vscode/
-
-  docs/
-    structure.md
-
-  template/
-    main.cpp
-    local_compile.sh
-
-  library/
-    util/
-    math/
-    graph/
-    dp/
-
-  verify/
-    smoke.cpp
-
   contests/
     atcoder/
       abc/
@@ -69,35 +34,29 @@ kyopro/
       ahc/
       awc/
     codeforces/
-
   practice/
-    atcoder/
-      abc/
-      arc/
-      dp-contest/
-      tenkei90/
+    adt/
     aoj/
-    codeforces/
-    others/
-
+    atcoder/
+      acl-beginner-contest/
+      dp-contest/
+      others/
+    mizuiro/
+    tenkei90/
+  template/
+  library/
+  verify/
   tools/
-    setup_abc
-    setup_awc
-    bundle.py
-
   vendor/
-    ac-library/
-
+  docs/
   archive/
 ```
 
-今すぐ全移動する必要はありません。まずは新しく作るものからこのルールに寄せていき、既存フォルダは必要になったタイミングで少しずつ移します。
+`practice/`の既存シリーズは、無理に階層を揃えるためだけの移動はしません。シリーズ名から探せる現在の配置を維持します。
 
 ## contests のルール
 
-`contests/` は、本番コンテストの作業ログです。
-
-### AtCoder ABC / ARC
+AtCoder ABC・ARCは1問1フォルダで、ソース名を`main.cpp`に統一します。
 
 ```txt
 contests/atcoder/abc/abc430/a/main.cpp
@@ -105,317 +64,99 @@ contests/atcoder/abc/abc430/b/main.cpp
 contests/atcoder/arc/arc180/a/main.cpp
 ```
 
-基本は1問1フォルダにして、`main.cpp` と `input.txt` を置きます。
+新規作成にはルートのコマンドを使います。
 
-```txt
-abc430/
-  a/
-    main.cpp
-    input.txt
-  b/
-    main.cpp
-    input.txt
+```sh
+./sabc abc430
+./sabc arc180
+./sawc 40
 ```
 
-理由:
-
-- setup スクリプトと相性がよい
-- 問題ごとの入力・実行ファイル・メモを置きやすい
-- 本番中の作業単位と一致する
-
-### AHC / AWC
-
-AHC や AWC も本番参加なら `contests/atcoder/` に寄せます。
+AWCは`a`から`e`まで作成されます。Codeforcesは既存配置に合わせます。
 
 ```txt
-contests/atcoder/ahc/ahc060/main.cpp
-contests/atcoder/awc/awc0040/a/main.cpp
+contests/codeforces/1076/a.cpp
+contests/codeforces/1076/b.cpp
 ```
-
-AWC は5問構成なので、setup で作る問題は `a` から `e` までです。
-
-```txt
-awc0040/
-  a/
-  b/
-  c/
-  d/
-  e/
-```
-
-### Codeforces
-
-本番参加なら `contests/codeforces/` に置きます。
-
-```txt
-contests/codeforces/round_1076/a.cpp
-contests/codeforces/round_1076/b.cpp
-```
-
-Codeforces は1問1ファイルでも十分です。入力やメモを分けたい場合だけ問題フォルダにします。
 
 ## practice のルール
 
-`practice/` は練習・復習・埋め直し用です。
-
-ここは「あとで探しやすいこと」を優先します。本番時のフォルダ構造を完全に再現する必要はありません。
-
-### AtCoder ABC の過去問
-
-ABC の過去問を練習として解く場合:
+`practice/`は「精進したコード全部」ではなく、教材・問題集・テーマ練習のまとまりに使います。
 
 ```txt
-practice/atcoder/abc/abc350/c.cpp
-practice/atcoder/abc/abc350/d.cpp
-practice/atcoder/abc/abc400/e.cpp
-```
-
-1問1ファイルを基本にします。
-
-理由:
-
-- practice では入力ファイルやビルド成果物を問題ごとに分ける必要が薄い
-- 一覧した時に「どの問題を解いたか」が分かりやすい
-- 本番用の `contests/.../a/main.cpp` と役割が分かれる
-
-必要が出た場合だけ、問題フォルダにしても構いません。
-
-```txt
-practice/atcoder/abc/abc350/c/
-  main.cpp
-  note.md
-  input.txt
-```
-
-判断基準:
-
-- ただ解くだけ: `c.cpp`
-- 解説メモや複数実装を残したい: `c/`
-- 乱択テストや生成器がある: `c/`
-
-### ARC の過去問
-
-```txt
-practice/atcoder/arc/arc180/a.cpp
-practice/atcoder/arc/arc180/b.cpp
-```
-
-ABC と同じく、基本は1問1ファイルです。
-
-### Educational / 典型系
-
-コンテスト名や教材名でまとめます。
-
-```txt
+practice/tenkei90/001.cpp
+practice/tenkei90/042.cpp
+practice/adt/20260602_2/a.cpp
 practice/atcoder/dp-contest/a.cpp
-practice/atcoder/dp-contest/b.cpp
-practice/atcoder/tenkei90/001.cpp
-practice/atcoder/tenkei90/002.cpp
-```
-
-典型90のように番号が3桁で管理されているものは、ゼロ埋めします。
-
-```txt
-001.cpp
-042.cpp
-090.cpp
-```
-
-### AOJ
-
-AOJ は問題IDをそのまま使います。
-
-```txt
 practice/aoj/ITP1_3_D.cpp
-practice/aoj/ALDS1_1_A.cpp
-practice/aoj/GRL_1_A.cpp
 ```
 
-既存ファイルに `ITP_3_D.cpp` のような名前がある場合、新規作成分から公式ID寄せにしていけば十分です。
+命名規則:
 
-### Codeforces 練習
+- 問題記号がある教材: `a.cpp`, `b.cpp`
+- 番号管理の教材: `001.cpp`, `042.cpp`のようにゼロ埋め
+- AOJ: 公式の問題ID
+- 同じシリーズでは既存の命名規則を優先
+- メモや生成器が必要な場合だけ1問1フォルダにする
 
-Codeforces の練習は、コンテスト番号と問題文字を入れます。
+通常のABCやARCの過去問を`practice/atcoder/abc/`へ複製する運用はしません。`contests/`の出典に対応する場所を使います。
+
+## ローカルファイルとテスト
+
+入力、期待出力、ビルド成果物はGit管理しません。
+
+1問1フォルダの`main.cpp`では、同じフォルダの`test/`を使います。
 
 ```txt
-practice/codeforces/1076/a.cpp
-practice/codeforces/1076/b.cpp
+a/
+  main.cpp
+  input.txt
+  test/
+    01.in
+    01.out
 ```
 
-問題名まで入れたい場合は、短くします。
+1フォルダに複数の`.cpp`がある教材では、ファイル名ごとにテストを分けます。
 
 ```txt
-practice/codeforces/1076/a_minimizing_the_string.cpp
+tenkei90/
+  032.cpp
+  076.cpp
+  test/
+    032/
+      01.in
+      01.out
+    076/
+      01.in
+      01.out
 ```
 
-ただし、長いファイル名は探しにくくなるので、基本は `a.cpp`, `b.cpp` でよいです。
-
-## practice 内の命名規則
-
-基本ルール:
-
-- ファイル名は小文字中心
-- AtCoder ABC/ARC は `a.cpp`, `b.cpp`, `c.cpp`
-- 典型90など番号管理のものは `001.cpp`
-- AOJ は公式IDを使う
-- 1問1ファイルを基本にする
-- メモや生成器が必要な時だけ1問1フォルダにする
-
-推奨:
-
-```txt
-practice/atcoder/abc/abc350/c.cpp
-practice/atcoder/tenkei90/001.cpp
-practice/aoj/ALDS1_1_A.cpp
-practice/codeforces/1076/a.cpp
-```
-
-避けたいもの:
-
-```txt
-practice/abc350C.cpp
-practice/ABC350/c_ans.cpp
-practice/atcoder/abc350-c.cpp
-```
-
-理由:
-
-- 大文字小文字や区切りが揺れる
-- コンテスト単位で一覧しづらい
-- 後でスクリプト化しにくい
+`./stest`はソース名を見て、この配置を自動選択します。
 
 ## template / library / verify
 
-### template
+- `template/main.cpp`: setupがコピーする提出用テンプレート
+- `library/`: ACLにない、自分で繰り返し使う部品
+- `verify/`: 自作ライブラリの動作確認
 
-`template/` は提出用テンプレートです。
-
-```txt
-template/main.cpp
-template/local_compile.sh
-```
-
-setup スクリプトは `template/main.cpp` をコピーします。
-
-### library
-
-`library/` は共通ライブラリです。
-
-```txt
-library/util/
-library/math/
-library/graph/
-library/dp/
-```
-
-ACL にあるものは原則として置きません。ACL にないもの、または ACL を使いやすくする薄い補助だけ置きます。
-
-### verify
-
-`verify/` はライブラリの動作確認用です。
-
-```txt
-verify/smoke.cpp
-```
-
-新しいライブラリを追加したら、最低限 `smoke.cpp` に小さな確認を足します。
+テンプレート更新時は、`.vscode/kyopro.code-snippets`の`main`スニペットも同時に更新します。ACLにある機能は原則として再実装しません。
 
 ## tools / vendor / archive
 
-### tools
+- `tools/`: setupやテスト実行などの補助スクリプト
+- `vendor/ac-library/`: AtCoder Library
+- `archive/`: 古いGit情報や設定の退避場所。Git管理外
 
-自分で使うスクリプトを置きます。
+設定は原則としてルートの`.clang-format`と`.vscode/`に集約します。
 
-```txt
-tools/setup_abc
-tools/setup_awc
-tools/bundle.py
-```
+## 迷った時
 
-現在は `tools/setup_abc` と `tools/setup_awc` を本体にし、普段はルートの `sabc` と `sawc` から呼び出します。
-
-### vendor
-
-外部から持ってきた依存を置きます。
-
-```txt
-vendor/ac-library/
-```
-
-ACL は `vendor/ac-library` に置きます。コンパイル時の include パスもこの場所を向けます。
-
-### archive
-
-普段使わないが、すぐ消すのは不安なものを置きます。
-
-```txt
-archive/atcoder-novisteps-sync/
-archive/old-settings/
-```
-
-`.claude` や古い `.vscode`、古いテンプレートなどは、削除前に一度ここへ逃がすと安全です。
-
-## 設定ファイルの方針
-
-### .clang-format
-
-原則としてルートの `.clang-format` だけを使います。
-
-```txt
-kyopro/.clang-format
-```
-
-各フォルダに `.clang-format` が散っていると、どの設定が効いているか分かりにくくなります。特別な理由がない限り、下位フォルダの `.clang-format` は整理候補です。
-
-### .vscode
-
-基本はルートの `.vscode` に寄せます。
-
-ただし、特定の下位フォルダだけを VS Code で開く習慣がある場合、そのフォルダの `.vscode` を戻す意味はあります。
-
-判断基準:
-
-- `kyopro` 全体を開く: ルート `.vscode` だけでよい
-- 特定フォルダだけ開くことが多い: そのフォルダの `.vscode` を戻してもよい
-- ほぼ使っていない: `archive/` へ移す候補
-
-### .DS_Store
-
-`.DS_Store` は macOS が自動生成するファイルなので、基本的に Git 管理しません。
-
-`.gitignore` に以下を入れておくとよいです。
-
-```gitignore
-.DS_Store
-**/.DS_Store
-build/
-*.out
-```
-
-## 移行の進め方
-
-いきなり全てを移動すると、setup スクリプトや VS Code 設定、Git 管理の境界が壊れやすいです。
-
-おすすめの順番:
-
-1. 新しく作る practice コードから命名規則を適用する
-2. `README.md` と `docs/structure.md` を運用の基準にする
-3. `.clang-format` をルートへ寄せる
-4. 使っていない `.DS_Store`, build 成果物を整理する
-5. setup スクリプトを `tools/` に集約する
-6. 既存の `abc`, `arc`, `ahc`, `awc` を `contests/` 配下へ移す
-
-特に `abc`, `awc`, `ahc`, `practice`, `codeforces` はそれぞれ `.git` を持っているため、移動時は Git 管理の扱いを確認してから進めます。
-
-## 迷った時の判断
-
-迷ったら次の基準で決めます。
-
-- 本番中に作った: `contests/`
-- 後から練習で解いた: `practice/`
+- ABCなど特定コンテストの問題: `contests/`の対応する場所
+- 教材・問題集を順に解く: `practice/`のシリーズ名
 - 何度も使う部品: `library/`
 - 提出の土台: `template/`
 - ライブラリ確認: `verify/`
-- スクリプト: `tools/`
-- 外部から持ってきたもの: `vendor/`
-- 今は使わないが残したい: `archive/`
+- 外部依存: `vendor/`
+- 普段見ない退避物: `archive/`
+
+保存場所に迷ったときは、「今は精進か」ではなく「その問題を後からどの名前で探すか」で決めます。
