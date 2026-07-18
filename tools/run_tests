@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SOURCE="${1:-main.cpp}"
+
+if [ ! -f "$SOURCE" ]; then
+  echo "Error: C++ソースが見つかりません: $SOURCE"
+  echo "使い方: stest [main.cpp]"
+  exit 1
+fi
+
+SOURCE_DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
+SOURCE_PATH="$SOURCE_DIR/$(basename "$SOURCE")"
+TEST_DIR="${2:-$SOURCE_DIR/test}"
+BUILD_DIR="$SOURCE_DIR/build"
+BINARY="$BUILD_DIR/test_runner"
+
+shopt -s nullglob
+INPUTS=("$TEST_DIR"/*.in)
+shopt -u nullglob
+
+if [ ${#INPUTS[@]} -eq 0 ]; then
+  mkdir -p "$TEST_DIR"
+  for n in 01 02 03; do
+    touch "$TEST_DIR/$n.in" "$TEST_DIR/$n.out"
+  done
+  echo "テスト雛形を作成しました: $TEST_DIR"
+  echo "01.in, 02.in, 03.in に入力を保存して、もう一度実行してください"
+  exit 1
+fi
+
+mkdir -p "$BUILD_DIR"
+
+/usr/local/bin/g++ -std=c++23 -O2 -Wall -Wextra -Wshadow \
+  -DLOCAL -D_GLIBCXX_DEBUG \
+  -I/Users/sagarayuto/kyopro \
+  -I/Users/sagarayuto/kyopro/vendor/ac-library \
+  "$SOURCE_PATH" -o "$BINARY"
+
+TOTAL=0
+CHECKED=0
+PASSED=0
+FAILED=0
+
+for INPUT in "${INPUTS[@]}"; do
+  NAME="$(basename "$INPUT" .in)"
+  EXPECTED="$TEST_DIR/$NAME.out"
+  ACTUAL="$BUILD_DIR/$NAME.actual"
+  TOTAL=$((TOTAL + 1))
+
+  echo ""
+  echo "===== $NAME ====="
+
+  if ! "$BINARY" < "$INPUT" > "$ACTUAL"; then
+    echo "RE: 実行時エラー"
+    FAILED=$((FAILED + 1))
+    continue
+  fi
+
+  cat "$ACTUAL"
+
+  if [ -s "$EXPECTED" ]; then
+    CHECKED=$((CHECKED + 1))
+    if diff -wB "$EXPECTED" "$ACTUAL" >/dev/null; then
+      echo "[AC]"
+      PASSED=$((PASSED + 1))
+    else
+      echo "[WA] expected:"
+      cat "$EXPECTED"
+      FAILED=$((FAILED + 1))
+    fi
+  else
+    echo "[出力比較なし: $NAME.out は空です]"
+  fi
+done
+
+echo ""
+echo "===== summary ====="
+echo "実行: $TOTAL  比較: $CHECKED  AC: $PASSED  失敗: $FAILED"
+
+if [ "$FAILED" -gt 0 ]; then
+  exit 1
+fi

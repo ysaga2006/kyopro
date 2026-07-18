@@ -63,6 +63,12 @@ for p in $PROBLEMS; do
         touch "$DIR/input.txt"
         echo "  ✓ $CONTEST/$p/input.txt"
     fi
+    TEST_DIR="$DIR/test"
+    mkdir -p "$TEST_DIR"
+    for n in 01 02 03; do
+        [ -f "$TEST_DIR/$n.in" ] || touch "$TEST_DIR/$n.in"
+        [ -f "$TEST_DIR/$n.out" ] || touch "$TEST_DIR/$n.out"
+    done
 done
 
 CD_COMMAND="cd $BASE/$FIRST_PROBLEM"
@@ -78,4 +84,3 @@ echo " $CONTEST のセットアップ完了"
 echo " 場所: $BASE/"
 echo " テンプレート: $TEMPLATE"
 echo " $COPIED: $CD_COMMAND"
-

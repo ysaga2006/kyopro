@@ -10,6 +10,13 @@
                 "isDefault": true
             },
             "problemMatcher": "$gcc"
+        },
+        {
+            "label": "複数テスト実行",
+            "type": "shell",
+            "command": "\"${workspaceFolder}/stest\" \"${file}\"",
+            "group": "test",
+            "problemMatcher": []
         }
     ]
 }

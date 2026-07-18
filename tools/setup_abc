@@ -77,6 +77,12 @@ for p in "$@"; do
         touch "$DIR/input.txt"
         echo "  ✓ $PREFIX/$CONTEST/$p/input.txt"
     fi
+    TEST_DIR="$DIR/test"
+    mkdir -p "$TEST_DIR"
+    for n in 01 02 03; do
+        [ -f "$TEST_DIR/$n.in" ] || touch "$TEST_DIR/$n.in"
+        [ -f "$TEST_DIR/$n.out" ] || touch "$TEST_DIR/$n.out"
+    done
 done
 
 echo ""
@@ -92,4 +98,3 @@ if command -v pbcopy >/dev/null 2>&1 && printf "%s" "$CD_COMMAND" | pbcopy; then
 else
     echo " 移動するなら: $CD_COMMAND"
 fi
-
