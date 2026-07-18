@@ -2,4 +2,37 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# 問題フォルダ内では引数なし、コンテストフォルダ内では問題記号だけで実行できる。
+if [ $# -eq 0 ]; then
+  exec "$SCRIPT_DIR/tools/run_tests" main.cpp
+fi
+
+if [ $# -eq 1 ] && [ -f "$1/main.cpp" ]; then
+  exec "$SCRIPT_DIR/tools/run_tests" "$1/main.cpp"
+fi
+
+# どこからでも `st abc430 a` または `st 430 a` で実行できる。
+if [ $# -eq 2 ]; then
+  CONTEST="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  PROBLEM="$(printf '%s' "$2" | tr '[:upper:]' '[:lower:]')"
+
+  if [[ "$CONTEST" =~ ^[0-9]+$ ]]; then
+    CONTEST="abc$CONTEST"
+  fi
+
+  if [[ "$CONTEST" =~ ^awc([0-9]+)$ ]]; then
+    AWC_NUMBER="${BASH_REMATCH[1]}"
+    printf -v CONTEST "awc%04d" "$((10#$AWC_NUMBER))"
+  fi
+
+  if [[ "$CONTEST" =~ ^(abc|arc|awc)[0-9]+$ ]]; then
+    TYPE="${BASH_REMATCH[1]}"
+    if [[ "$PROBLEM" =~ ^[a-z]$ ]]; then
+      SOURCE="$SCRIPT_DIR/contests/atcoder/$TYPE/$CONTEST/$PROBLEM/main.cpp"
+      exec "$SCRIPT_DIR/tools/run_tests" "$SOURCE"
+    fi
+  fi
+fi
+
 exec "$SCRIPT_DIR/tools/run_tests" "$@"
