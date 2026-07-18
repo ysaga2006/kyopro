@@ -1,33 +1,27 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
+constexpr ll INF = (1LL << 60);
+#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int n, l, r; cin >> n >> l >> r;
-    int count = 0;
-    string s; cin >> s;
-    vector<vector<int>> v(26, vector<int>());
-    for (int i = 0; i < n; i++) {
-        v.at(s[i] - 'a').emplace_back(i);
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  ll n, l, r;
+  string s;
+  cin >> n >> l >> r >> s;
+
+  vector cnt(26, vector<ll>{});
+  rep(i, s.size()) cnt[s[i] - 'a'].push_back(i);
+
+  rep(i, 26) sort(cnt.begin(), cnt.end());
+
+  rep(i, 26) {
+    for (auto x : cnt[i]) {
     }
-    for (int i = 0; i < 26; i++) {
-        int left = 0, right = 1; // rightが1にならないことも。
-        while (right < int(v.at(i).size())) {
-            cout << left << " " << right << '\n';
-            int dis = v.at(i).at(right) - v.at(i).at(left);
-            if (dis >= l && dis <= r) {
-                count++; right++;
-            } else if (dis < l) {
-                right++;
-            } else if (dis > r) {
-                left++;
-            }
-            cout << count << '\n';
-        }
-    }
-    cout << count << endl;
-    return 0;
+  }
+  return 0;
 }
+
+// iを固定すると、i+L <= j <= i+R
