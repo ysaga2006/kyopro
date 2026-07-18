@@ -8,5 +8,8 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
+  ll h, w; cin >> h >> w;
+  if (w >= 25 * h * h) cout << "Yes" << '\n';
+  else cout << "No" << '\n';
   return 0;
 }
