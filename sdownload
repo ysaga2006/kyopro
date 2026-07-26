@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+usage() {
+  echo "使い方:"
+  echo "  sd                 # 問題フォルダ内"
+  echo "  sd a               # コンテストフォルダ内"
+  echo "  sd 468 a"
+  echo "  sd abc468 a"
+  echo "  sd awc40 a"
+}
+
+CONTEST=""
+PROBLEM=""
+
+if [ $# -eq 0 ]; then
+  PROBLEM="$(basename "$PWD")"
+  CONTEST="$(basename "$(dirname "$PWD")")"
+elif [ $# -eq 1 ] && [ -f "$1" ]; then
+  SOURCE_DIR="$(cd "$(dirname "$1")" && pwd)"
+  PROBLEM="$(basename "$SOURCE_DIR")"
+  CONTEST="$(basename "$(dirname "$SOURCE_DIR")")"
+elif [ $# -eq 1 ]; then
+  PROBLEM="$1"
+  CONTEST="$(basename "$PWD")"
+elif [ $# -eq 2 ]; then
+  CONTEST="$1"
+  PROBLEM="$2"
+else
+  usage
+  exit 1
+fi
+
+CONTEST="$(printf '%s' "$CONTEST" | tr '[:upper:]' '[:lower:]')"
+PROBLEM="$(printf '%s' "$PROBLEM" | tr '[:upper:]' '[:lower:]')"
+
+if [[ "$CONTEST" =~ ^[0-9]+$ ]]; then
+  CONTEST="abc$CONTEST"
+fi
+
+if [[ "$CONTEST" =~ ^awc([0-9]+)$ ]]; then
+  AWC_NUMBER="${BASH_REMATCH[1]}"
+  printf -v CONTEST "awc%04d" "$((10#$AWC_NUMBER))"
+fi
+
+if ! [[ "$CONTEST" =~ ^(abc|arc|awc)[0-9]+$ ]]; then
+  echo "Error: コンテストを判定できません: $CONTEST"
+  usage
+  exit 1
+fi
+TYPE="${BASH_REMATCH[1]}"
+
+if ! [[ "$PROBLEM" =~ ^[a-z]$ ]]; then
+  echo "Error: 問題記号を判定できません: $PROBLEM"
+  usage
+  exit 1
+fi
+
+exec "$SCRIPT_DIR/tools/download_samples" "$TYPE" "$CONTEST" "$PROBLEM"

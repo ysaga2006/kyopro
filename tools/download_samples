@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TYPE="${1:-}"
+CONTEST="${2:-}"
+PROBLEM="${3:-}"
+
+if [ -z "$TYPE" ] || [ -z "$CONTEST" ] || [ -z "$PROBLEM" ]; then
+  echo "使い方: download_samples <type> <contest> <problem>"
+  exit 1
+fi
+
+if ! command -v oj >/dev/null 2>&1; then
+  echo "Error: oj (online-judge-tools) が見つかりません"
+  exit 1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+KYOPRO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROBLEM_DIR="$KYOPRO_ROOT/contests/atcoder/$TYPE/$CONTEST/$PROBLEM"
+TEST_DIR="$PROBLEM_DIR/test"
+URL="https://atcoder.jp/contests/$CONTEST/tasks/${CONTEST}_$PROBLEM"
+
+if [ ! -f "$PROBLEM_DIR/main.cpp" ]; then
+  case "$TYPE" in
+    abc | arc) "$SCRIPT_DIR/setup_abc" "$CONTEST" "$PROBLEM" ;;
+    awc) "$SCRIPT_DIR/setup_awc" "$CONTEST" "$PROBLEM" ;;
+    *)
+      echo "Error: 未対応のコンテスト形式です: $TYPE"
+      exit 1
+      ;;
+  esac
+fi
+
+TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/kyopro-samples.XXXXXX")"
+cleanup() {
+  rm -rf "$TMP_DIR"
+}
+trap cleanup EXIT
+
+echo "サンプルを取得中: $CONTEST $PROBLEM"
+oj download --silent --directory "$TMP_DIR" --format '%i.%e' "$URL"
+
+mkdir -p "$TEST_DIR"
+DOWNLOADED=0
+UPDATED=0
+SKIPPED=0
+
+shopt -s nullglob
+INPUTS=("$TMP_DIR"/*.in)
+shopt -u nullglob
+
+for SOURCE_INPUT in "${INPUTS[@]}"; do
+  RAW_NAME="$(basename "$SOURCE_INPUT" .in)"
+  NAME="$RAW_NAME"
+  if [[ "$RAW_NAME" =~ ^[0-9]+$ ]]; then
+    printf -v NAME "%02d" "$((10#$RAW_NAME))"
+  fi
+  SOURCE_OUTPUT="$TMP_DIR/$RAW_NAME.out"
+  DESTINATION_INPUT="$TEST_DIR/$NAME.in"
+  DESTINATION_OUTPUT="$TEST_DIR/$NAME.out"
+  DOWNLOADED=$((DOWNLOADED + 1))
+
+  INPUT_CONFLICT=0
+  OUTPUT_CONFLICT=0
+  if [ -s "$DESTINATION_INPUT" ] && ! cmp -s "$SOURCE_INPUT" "$DESTINATION_INPUT"; then
+    INPUT_CONFLICT=1
+  fi
+  if [ -s "$DESTINATION_OUTPUT" ] && ! cmp -s "$SOURCE_OUTPUT" "$DESTINATION_OUTPUT"; then
+    OUTPUT_CONFLICT=1
+  fi
+
+  if [ "$INPUT_CONFLICT" -eq 1 ] || [ "$OUTPUT_CONFLICT" -eq 1 ]; then
+    echo "  保持: $NAME.in / $NAME.out（既存内容があるため上書きしません）"
+    SKIPPED=$((SKIPPED + 1))
+    continue
+  fi
+
+  cp "$SOURCE_INPUT" "$DESTINATION_INPUT"
+  cp "$SOURCE_OUTPUT" "$DESTINATION_OUTPUT"
+  echo "  保存: $NAME.in / $NAME.out"
+  UPDATED=$((UPDATED + 1))
+done
+
+for NUMBER in 01 02 03; do
+  INPUT="$TEST_DIR/$NUMBER.in"
+  OUTPUT="$TEST_DIR/$NUMBER.out"
+  if [ -f "$INPUT" ] && [ -f "$OUTPUT" ] && [ ! -s "$INPUT" ] && [ ! -s "$OUTPUT" ]; then
+    rm -f "$INPUT" "$OUTPUT"
+  fi
+done
+
+if [ "$DOWNLOADED" -eq 0 ]; then
+  echo "Error: サンプルが見つかりませんでした: $URL"
+  exit 1
+fi
+
+echo ""
+echo "取得完了: $TEST_DIR"
+echo "保存: $UPDATED  保持: $SKIPPED"
+echo "実行: st $CONTEST $PROBLEM"

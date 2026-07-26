@@ -17,6 +17,13 @@
             "command": "\"${workspaceFolder}/stest\" \"${file}\"",
             "group": "test",
             "problemMatcher": []
+        },
+        {
+            "label": "サンプル取得",
+            "type": "shell",
+            "command": "\"${workspaceFolder}/sdownload\" \"${file}\"",
+            "group": "test",
+            "problemMatcher": []
         }
     ]
 }
