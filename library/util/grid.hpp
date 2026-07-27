@@ -21,7 +21,7 @@ constexpr bool in_grid(int i, int j, int h, int w) {
 
 template <size_t K, class Passable>
 vector<vector<int>> grid_bfs(int h, int w, int si, int sj, Passable passable,
-                             const array<int, K>& di, const array<int, K>& dj) {
+                            const array<int, K>& di, const array<int, K>& dj) {
   assert(h >= 0 && w >= 0);
   assert(in_grid(si, sj, h, w));
 
