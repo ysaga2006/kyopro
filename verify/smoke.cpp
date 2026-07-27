@@ -6,6 +6,7 @@ using mint = atcoder::modint998244353;
 #include "../library/util/basic.hpp"
 #include "../library/util/debug.hpp"
 #include "../library/util/compress.hpp"
+#include "../library/util/grid.hpp"
 #include "../library/math/combination.hpp"
 #include "../library/math/sieve.hpp"
 #include "../library/graph/dijkstra.hpp"
@@ -28,6 +29,20 @@ int main() {
   Compress<int> comp(a);
   assert(comp.size() == 4);
   assert(comp.get(4) == 2);
+
+  vector<string> grid = {"...", ".#.", "..."};
+  auto passable = [&](int i, int j) { return grid[i][j] != '#'; };
+  auto grid_dist = grid_bfs(3, 3, 0, 0, passable);
+  assert(grid_dist[2][2] == 4);
+  assert(grid_dist[1][1] == -1);
+  auto grid_seen = grid_dfs(3, 3, 0, 0, passable);
+  assert(grid_seen[2][2]);
+  assert(!grid_seen[1][1]);
+
+  vector<string> diagonal_grid = {".#", "#."};
+  auto diagonal_passable = [&](int i, int j) { return diagonal_grid[i][j] != '#'; };
+  auto diagonal_dist = grid_bfs(2, 2, 0, 0, diagonal_passable, di8, dj8);
+  assert(diagonal_dist[1][1] == 1);
 
   Combination<mint> comb(10);
   assert(comb.comb(5, 2).val() == 10);

@@ -27,7 +27,7 @@ kyopro/
       basic.hpp           # 型エイリアス、定数、chmin/chmax など
       debug.hpp           # ローカル専用 debug(...)
       compress.hpp        # 座標圧縮
-      grid.hpp            # グリッド方向配列
+      grid.hpp            # グリッド方向配列、DFS、BFS
 
     math/
       combination.hpp     # ACL modint 用の組合せ
@@ -191,7 +191,7 @@ comp.build();
 
 ## util/grid.hpp
 
-グリッド探索用の方向配列です。
+グリッド探索用の方向配列と、DFS・BFSの雛形です。
 
 ```cpp
 for (int dir = 0; dir < 4; dir++) {
@@ -204,6 +204,39 @@ for (int dir = 0; dir < 4; dir++) {
 
 - `di4`, `dj4`: 上右下左の4近傍
 - `di8`, `dj8`: 8近傍
+- `in_grid(i, j, h, w)`: マスがグリッド内か判定
+- `grid_bfs(...)`: 始点からの最短距離。未到達は`-1`
+- `grid_dfs(...)`: 始点から到達できるマス
+
+4近傍BFS:
+
+```cpp
+vector<string> s(h);
+auto passable = [&](int i, int j) {
+  return s[i][j] != '#';
+};
+
+auto dist = grid_bfs(h, w, si, sj, passable);
+if (dist[gi][gj] != -1) {
+  cout << dist[gi][gj] << '\n';
+}
+```
+
+4近傍DFS:
+
+```cpp
+auto seen = grid_dfs(h, w, si, sj, passable);
+cout << (seen[gi][gj] ? "Yes" : "No") << '\n';
+```
+
+8近傍を使う場合は、方向配列を追加で渡します。
+
+```cpp
+auto dist8 = grid_bfs(h, w, si, sj, passable, di8, dj8);
+auto seen8 = grid_dfs(h, w, si, sj, passable, di8, dj8);
+```
+
+DFSは再帰ではなくstackで実装しているため、再帰の深さを気にせず使えます。`passable(i, j)`は、移動可能なマスで`true`を返すようにします。
 
 ## math/combination.hpp
 
