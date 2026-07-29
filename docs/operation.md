@@ -250,7 +250,45 @@ contests/atcoder/awc/awc0040/a/main.cpp
 contests/atcoder/awc/awc0040/a/input.txt
 ```
 
-setup の本体は `tools/` にあります。普段は短い `./sabc` と `./sawc` を使うのが基本です。
+setup の本体は `tools/` にあります。普段は短い `./sabc`、`./sawc`、`./scf` を使うのが基本です。
+
+### Codeforces
+
+Codeforcesのコンテスト番号を指定します。
+
+```sh
+cd /Users/sagarayuto/kyopro
+./scf 1900
+```
+
+`cf1900`と書いても構いません。
+
+```sh
+./scf cf1900
+```
+
+問題数はコンテストによって異なるため、デフォルトでは`a`から`f`まで作成します。一部だけ、または`g`以降も作る場合は問題記号を列挙します。
+
+```sh
+./scf 1900 d e
+./scf 1900 a b c d e f g
+```
+
+生成先:
+
+```txt
+contests/codeforces/1900/a.cpp
+contests/codeforces/1900/test/a/01.in
+```
+
+コンテストフォルダへ移動後、問題ごとにまとめてテストできます。
+
+```sh
+cd contests/codeforces/1900
+st a.cpp
+```
+
+Codeforcesのサンプル自動取得は現在未対応です。問題ページから`test/a/01.in`と`01.out`などへ貼り付けます。
 
 ## コンテスト中のデバッグ
 
@@ -620,6 +658,12 @@ AWC セットアップ:
 
 ```sh
 ./sawc 40
+```
+
+Codeforces セットアップ:
+
+```sh
+./scf 1900
 ```
 
 ## 迷った時

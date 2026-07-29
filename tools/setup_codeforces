@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Codeforces contest setup script.
+#
+# Usage:
+#   ./tools/setup_codeforces 1900
+#   ./tools/setup_codeforces cf1900
+#   ./tools/setup_codeforces 1900 d e
+
+usage() {
+  echo "使い方: setup_codeforces <contest_id> [problems]"
+  echo "例:     setup_codeforces 1900"
+  echo "        setup_codeforces cf1900"
+  echo "        setup_codeforces 1900 d e"
+}
+
+INPUT="${1:-}"
+
+if [ -z "$INPUT" ]; then
+  usage
+  exit 1
+fi
+
+shift
+CONTEST="$(printf '%s' "$INPUT" | tr '[:upper:]' '[:lower:]')"
+CONTEST="${CONTEST#cf}"
+
+if ! [[ "$CONTEST" =~ ^[0-9]+$ ]]; then
+  echo "Error: contest_id は 1900 / cf1900 の形式で指定してください"
+  exit 1
+fi
+
+if [ $# -eq 0 ]; then
+  set -- a b c d e f
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+KYOPRO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+TEMPLATE="$KYOPRO_ROOT/template/main.cpp"
+BASE="$KYOPRO_ROOT/contests/codeforces/$CONTEST"
+
+if [ ! -f "$TEMPLATE" ]; then
+  echo "Error: テンプレートが見つかりません: $TEMPLATE"
+  exit 1
+fi
+
+mkdir -p "$BASE"
+touch "$BASE/input.txt"
+
+FIRST_PROBLEM=""
+for raw_problem in "$@"; do
+  problem="$(printf '%s' "$raw_problem" | tr '[:upper:]' '[:lower:]')"
+  if ! [[ "$problem" =~ ^[a-z][0-9]?$ ]]; then
+    echo "Error: 問題記号は a / b / a1 のように指定してください: $raw_problem"
+    exit 1
+  fi
+
+  if [ -z "$FIRST_PROBLEM" ]; then
+    FIRST_PROBLEM="$problem"
+  fi
+
+  SOURCE="$BASE/$problem.cpp"
+  if [ ! -f "$SOURCE" ]; then
+    cp "$TEMPLATE" "$SOURCE"
+    echo "  ✓ codeforces/$CONTEST/$problem.cpp"
+  else
+    echo "  - codeforces/$CONTEST/$problem.cpp (already exists)"
+  fi
+
+  TEST_DIR="$BASE/test/$problem"
+  mkdir -p "$TEST_DIR"
+  for n in 01 02 03; do
+    [ -f "$TEST_DIR/$n.in" ] || touch "$TEST_DIR/$n.in"
+    [ -f "$TEST_DIR/$n.out" ] || touch "$TEST_DIR/$n.out"
+  done
+done
+
+CD_COMMAND="cd $BASE"
+
+if command -v pbcopy >/dev/null 2>&1 && printf "%s" "$CD_COMMAND" | pbcopy; then
+  COPIED="コピー済み"
+else
+  COPIED="移動するなら"
+fi
+
+echo ""
+echo " Codeforces $CONTEST のセットアップ完了"
+echo " 場所: $BASE/"
+echo " テンプレート: $TEMPLATE"
+echo " テスト: st $FIRST_PROBLEM.cpp"
+echo " $COPIED: $CD_COMMAND"

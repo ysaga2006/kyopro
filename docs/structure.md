@@ -70,9 +70,10 @@ contests/atcoder/arc/arc180/a/main.cpp
 ./sabc abc430
 ./sabc arc180
 ./sawc 40
+./scf 1900
 ```
 
-AWCは`a`から`e`まで作成されます。Codeforcesは既存配置に合わせます。
+AWCは`a`から`e`まで作成されます。Codeforcesは既存の平置き配置に合わせ、デフォルトで`a.cpp`から`f.cpp`まで作成されます。
 
 ```txt
 contests/codeforces/1076/a.cpp
