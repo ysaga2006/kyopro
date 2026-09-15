@@ -3,8 +3,9 @@ set -euo pipefail
 
 src="${1:-template/main.cpp}"
 out="${2:-/tmp/a.out}"
+SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
 
-g++ -std=c++23 -O2 -Wall -Wextra -Wshadow -DLOCAL \
+g++ -isysroot "$SDKROOT" -std=c++23 -O2 -Wall -Wextra -Wshadow -DLOCAL \
     -I/Users/sagarayuto/kyopro \
     -I/Users/sagarayuto/kyopro/vendor/ac-library \
     "$src" -o "$out"

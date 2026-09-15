@@ -23,9 +23,17 @@ fi
 TEST_DIR="${2:-$DEFAULT_TEST_DIR}"
 BUILD_DIR="$SOURCE_DIR/build"
 BINARY="$BUILD_DIR/test_runner_$SOURCE_NAME"
+SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
 
 shopt -s nullglob
-INPUTS=("$TEST_DIR"/*.in)
+INPUTS=()
+for INPUT in "$TEST_DIR"/*.in; do
+  EXPECTED="${INPUT%.in}.out"
+  if [ ! -s "$INPUT" ] && [ ! -s "$EXPECTED" ]; then
+    continue
+  fi
+  INPUTS+=("$INPUT")
+done
 shopt -u nullglob
 
 if [ ${#INPUTS[@]} -eq 0 ]; then
@@ -40,7 +48,7 @@ fi
 
 mkdir -p "$BUILD_DIR"
 
-/usr/local/bin/g++ -std=c++23 -O2 -Wall -Wextra -Wshadow \
+/usr/local/bin/g++ -isysroot "$SDKROOT" -std=c++23 -O2 -Wall -Wextra -Wshadow \
   -DLOCAL -D_GLIBCXX_DEBUG \
   -I/Users/sagarayuto/kyopro \
   -I/Users/sagarayuto/kyopro/vendor/ac-library \
