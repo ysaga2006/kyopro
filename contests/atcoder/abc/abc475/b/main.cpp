@@ -15,7 +15,12 @@ int main() {
   rep(i, n) {
     ll a;
     cin >> a;
-    ll x = 1000 * (1 + (a / 1000)) - a;
+    ll x = a / 1000;
+    x = (x + 1) * 1000 - a;
+
+    if (x == 1000) {
+      continue;
+    }
 
     cnt100 += (x / 100);
     x %= 100;

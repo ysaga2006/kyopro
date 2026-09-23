@@ -8,5 +8,7 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
+  ll n, s, l; cin >> n >> s >> l;
+  vector<ll> a(n);
   return 0;
 }
